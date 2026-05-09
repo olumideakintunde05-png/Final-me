@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#000000"/>
+<title>Daniel Wisdom Hub — Wallpapers</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:#000;overflow:hidden}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+
+/* ── CONTAINER ── */
+#reel{
+  width:100%;
+  height:100dvh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+#reel::-webkit-scrollbar{display:none}
+
+/* ── SLIDE ── */
+.slide{
+  position:relative;
+  width:100%;
+  height:95dvh;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+  border-radius:42px;
+}
+
+/* background image */
+.slide-bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center top;
+  filter:brightness(.85) saturate(.9);
+  transform:scale(1.04);
+  transition:transform 6s ease;
+  will-change:transform;
+}
+.slide.active .slide-bg{transform:scale(1.0)}
+
+/* overlay gradient */
+.slide-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.72) 0%,
+    rgba(0,0,0,.28) 38%,
+    rgba(0,0,0,.18) 55%,
+    rgba(0,0,0,.70) 78%,
+    rgba(0,0,0,.96) 100%
+  );
+}
+
+/* ── TOP: BRANDING ── */
+.slide-brand{
+  position:relative;z-index:3;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 0 0;
+  font-size:10px;font-weight:500;
+  letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,.28);
+}
+
+/* ── QUOTE BLOCK ── */
+.slide-quote{
+  position:relative;z-index:3;
+  width:100%;
+  padding:0 32px;
+  text-align:center;
+  margin-top:-8vh;
+}
+.slide-line{
+  display:block;
+  width:28px;height:1px;
+  background:rgba(255,255,255,.22);
+  margin:0 auto 22px;
+}
+.slide-text{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-style:italic;
+  font-weight:300;
+  font-size:clamp(26px,7.5vw,44px);
+  line-height:1.38;
+  color:#fff;
+  letter-spacing:.01em;
+  margin-bottom:20px;
+}
+.slide-author{
+  font-size:11px;
+  font-weight:400;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.45);
+}
+
+/* ── BOTTOM: CONTROLS ── */
+.slide-bottom{
+  position:relative;z-index:3;
+  width:100%;
+  padding:0 22px calc(env(safe-area-inset-bottom,0px) + 22px);
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+}
+
+/* category tag */
+.slide-tag{
+  font-size:9px;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.32);
+  border:1px solid rgba(255,255,255,.14);
+  padding:5px 12px;border-radius:50px;
+  backdrop-filter:blur(6px);
+}
+
+/* right side buttons */
+.slide-actions{
+  display:flex;flex-direction:column;gap:14px;align-items:center;
+}
+.action-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(10px);
+  color:#fff;font-size:17px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s ease;
+}
+.action-btn:hover{background:rgba(255,255,255,.18);transform:scale(1.08)}
+.action-btn:active{transform:scale(.92)}
+.action-btn.saved{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4)}
+
+/* ── PROGRESS DOTS ── */
+#dots{
+  position:fixed;right:10px;top:50%;
+  transform:translateY(-50%);
+  z-index:100;
+  display:flex;flex-direction:column;gap:6px;
+}
+.dot{
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(255,255,255,.25);
+  transition:all .3s ease;cursor:pointer;
+}
+.dot.on{height:18px;border-radius:2px;background:#fff}
+
+/* ── COUNTER ── */
+#counter{
+  position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px)+10px);
+  transform:translateX(-50%);
+  z-index:100;
+  font-size:10px;font-weight:500;letter-spacing:2px;
+  color:rgba(255,255,255,.25);
+  pointer-events:none;
+}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+80px);
+  left:50%;transform:translateX(-50%) translateY(10px);
+  background:rgba(30,30,30,.95);
+  border:1px solid rgba(255,255,255,.1);
+  color:#fff;padding:9px 20px;border-radius:50px;
+  font-size:12px;font-weight:400;letter-spacing:.5px;
+  opacity:0;transition:all .28s ease;pointer-events:none;
+  z-index:200;white-space:nowrap;
+  backdrop-filter:blur(12px);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── CANVAS ── */
+#dlCanvas{display:none}
+
+/* ── SWIPE HINT ── */
+.swipe-hint{
+  position:fixed;bottom:calc(env(safe-area-inset-bottom,0px)+70px);
+  left:50%;transform:translateX(-50%);
+  font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.2);z-index:100;pointer-events:none;
+  animation:pulse 3s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:.5}}
+
+/* ── LOADING SHIMMER ── */
+.slide-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);
+  animation:shim 2s infinite;
+}
+@keyframes shim{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+</style>
+</head>
+<body>
+
+<div id="counter">1 / 14</div>
+<div id="dots"></div>
+<div class="swipe-hint" id="swipeHint">↑ scroll to explore ↓</div>
+
+<div id="reel">
+
+  <!-- ══════════════════════════════════
+       SLIDE 1
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="0">
+    <div class="slide-bg" style="background-image:url('pic241.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Gotta win sometimes<br>when you always lose.</div>
+      <div class="slide-author">— Juice WRLD</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Pain</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 2
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="1">
+    <div class="slide-bg" style="background-image:url('pic251.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Make money<br>while you sleep<br>or work until you die.</div>
+      <div class="slide-author">— Warren Buffett</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Finance</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 3
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="2">
+    <div class="slide-bg" style="background-image:url('pic261.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">She said she'd never<br>fall again. But whispered<br>to the night, I lied.</div>
+      <div class="slide-author">— Unknown</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Life</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 4
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="3">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">They didn't ignore you.<br>They showed you<br>who they are.</div>
+      <div class="slide-author">— Maya Angelou</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Pain</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 5
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="4">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Your network<br>is your net worth.<br>Choose wisely.</div>
+      <div class="slide-author">— Tim Sanders</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Finance</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 6
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="5">
+    <div class="slide-bg" style="background-image:url('pic24.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text"><br><br></div>
+      <div class="slide-author"></div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Hustle</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 7
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="6">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Stop waiting for Friday.<br>Build a life<br>you don't need to escape.</div>
+      <div class="slide-author">— Unknown</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Hustle</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 8
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="7">
+    <div class="slide-bg" style="background-image:url('pic25.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text"><br><br></div>
+      <div class="slide-author"></div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Finance</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 9
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="8">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Not everyone<br>who lost you<br>was worth keeping.</div>
+      <div class="slide-author">— Unknown</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Pain</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 10
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="9">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">They sleep.<br>You grind.<br>That's the difference.</div>
+      <div class="slide-author">— Unknown</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Hustle</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 11
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="10">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Invest in yourself.<br>It's the best market<br>that will never crash.</div>
+      <div class="slide-author">— Warren Buffett</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Finance</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+   
+
+  <!-- ══════════════════════════════════
+       SLIDE 12
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="11">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Silence is the loudest<br>answer you'll<br>ever receive.</div>
+      <div class="slide-author">— Unknown</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Life</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 13
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Nobody cares<br>about your excuses.<br>Only your results.</div>
+      <div class="slide-author">— Unknown</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Hustle</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SLIDE 14
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="13">
+    <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1483721310020-03333e577078?w=900&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">The goal is to die<br>with memories,<br>not dreams.</div>
+      <div class="slide-author">— Unknown</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Life</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 15
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic1.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you can miss someone<br>and still not .<br>want them back.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 16
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic2.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you saw the <br>truth now.<br>move on.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+<!-- ══════════════════════════════════
+       SLIDE 17
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic3.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">they switch <br>when you needed.<br>them most.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+
+<!-- ══════════════════════════════════
+       SLIDE 18
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic4.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you can't<br>cheat.<br>consistency.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 19
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic5.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">focus on<br>becoming.<br>not proving.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 20
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic6.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you learn <br>who matters when.<br>you're down.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 21
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic7.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you survived<br>but you're not.<br>the same.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 22
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic8.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">pain<br>changes you.<br>quietly.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 23
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic9.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you felt<br>it they.<br>didn't.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 24
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic10.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">loyalty is<br>rare.<br>not normal.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 25
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic11.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">No risk<br>No.<br>reward.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 26
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic12.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">stay hungry<br>or.<br>stay average.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 27
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic13.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">consistency beats<br>talent.<br>.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 28
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic14.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you either<br>work or<br>wish.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 29
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic15.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">life won't give you<br>what you want,<br>but what you deserve.</div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- ══════════════════════════════════
+       SLIDE 30
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic16.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">some wounds<br>don't show.<br></div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ══════════════════════════════════
+       SLIDE 31
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic17.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Healing is <br>lonely.<br></div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+    <!-- ══════════════════════════════════
+       SLIDE 32
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic18.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Discipline <br>beats motivation.<br></div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+    <!-- ══════════════════════════════════
+       SLIDE 33
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic19.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">you become what <br>you repeat.<br></div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+    <!-- ══════════════════════════════════
+       SLIDE 34
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic20.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">move different <br>think different.<br></div>
+      <div class="slide-author">— Daniel</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+   <!-- ══════════════════════════════════
+       SLIDE 35
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic21.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Hate being broke,<br>but love the grind.<br></div>
+      <div class="slide-author">— 21 savage</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+   <!-- ══════════════════════════════════
+       SLIDE 36
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic22.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">Reality is wrong.<br>Dreams are for real<br></div>
+      <div class="slide-author">— Tupac Shakur</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+    <!-- ══════════════════════════════════
+       SLIDE 37
+  ══════════════════════════════════ -->
+  <div class="slide" data-idx="12">
+    <div class="slide-bg" style="background-image:url('pic23.jpg')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-brand">Daniel Wisdom Hub</div>
+    <div class="slide-quote">
+      <span class="slide-line"></span>
+      <div class="slide-text">sometimes life is a mess,<br>but you keep going<br></div>
+      <div class="slide-author">— juice wrld</div>
+    </div>
+    <div class="slide-bottom">
+      <span class="slide-tag">Real</span>
+      <div class="slide-actions">
+        <div class="action-btn" onclick="saveWall(this)" title="Save">🔖</div>
+        <div class="action-btn" onclick="downloadWall(this)" title="Download">⬇️</div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+</div><!-- /reel -->
+
+<canvas id="dlCanvas"></canvas>
+<div id="toast"></div>
+
+<script>
+/* ══════════════════════════════════
+   SLIDES & DOTS
+══════════════════════════════════ */
+const reel   = document.getElementById('reel');
+const slides = document.querySelectorAll('.slide');
+const dotsEl = document.getElementById('dots');
+const counter= document.getElementById('counter');
+const hint   = document.getElementById('swipeHint');
+const total  = slides.length;
+let   cur    = 0;
+let   saved  = new Set(JSON.parse(localStorage.getItem('dwh_wall_saved')||'[]'));
+
+// Build dots
+slides.forEach((_,i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' on':'');
+  d.onclick   = () => goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function goTo(idx) {
+  reel.scrollTo({top: idx * window.innerHeight, behavior:'smooth'});
+}
+
+function setActive(idx) {
+  if (idx === cur) return;
+  slides[cur]?.classList.remove('active');
+  cur = idx;
+  slides[cur].classList.add('active');
+  dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('on', i===idx));
+  counter.textContent = (idx+1) + ' / ' + total;
+  if (idx > 0) hint.style.opacity = '0';
+}
+
+// Intersection Observer for active slide
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = parseInt(e.target.dataset.idx);
+      setActive(idx);
+    }
+  });
+}, { root: reel, threshold: 0.55 });
+
+slides.forEach(s => {
+  io.observe(s);
+  // Restore save state
+  const idx = parseInt(s.dataset.idx);
+  if (saved.has(idx)) {
+    const btn = s.querySelector('.action-btn');
+    if (btn) btn.classList.add('saved');
+  }
+});
+
+// Init first
+slides[0].classList.add('active');
+
+/* ══════════════════════════════════
+   KEYBOARD NAV
+══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goTo(Math.min(cur+1, total-1));
+  if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  goTo(Math.max(cur-1, 0));
+});
+
+/* ══════════════════════════════════
+   SAVE
+══════════════════════════════════ */
+function saveWall(btn) {
+  const slide = btn.closest('.slide');
+  const idx   = parseInt(slide.dataset.idx);
+  if (saved.has(idx)) {
+    saved.delete(idx);
+    btn.classList.remove('saved');
+    btn.textContent = '🔖';
+    showToast('Removed from saved');
+  } else {
+    saved.add(idx);
+    btn.classList.add('saved');
+    btn.textContent = '✅';
+    showToast('🔖 Saved to collection');
+  }
+  localStorage.setItem('dwh_wall_saved', JSON.stringify([...saved]));
+}
+
+/* ══════════════════════════════════
+   DOWNLOAD  (canvas render)
+══════════════════════════════════ */
+function downloadWall(btn) {
+  const slide  = btn.closest('.slide');
+  const bgEl   = slide.querySelector('.slide-bg');
+  const textEl = slide.querySelector('.slide-text');
+  const authEl = slide.querySelector('.slide-author');
+  const tagEl  = slide.querySelector('.slide-tag');
+
+  const quoteText  = textEl.innerText;
+  const authorText = authEl.innerText;
+  const tagText    = tagEl.innerText.toUpperCase();
+
+  // Extract URL from background-image
+  const bgStyle = bgEl.style.backgroundImage;
+  const urlMatch = bgStyle.match(/url\(['"]?(.+?)['"]?\)/);
+  if (!urlMatch) return;
+
+  // Swap for hi-res download
+  const imgUrl = urlMatch[1].replace('w=900', 'w=1080').replace('q=80', 'q=90');
+
+  btn.textContent = '⏳';
+  btn.style.pointerEvents = 'none';
+
+  const canvas = document.getElementById('dlCanvas');
+  const ctx    = canvas.getContext('2d');
+  // Phone wallpaper: 1080 × 1920
+  canvas.width  = 1080;
+  canvas.height = 1920;
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+
+  const draw = () => {
+    // ── Background ──
+    const scale   = Math.max(1080/img.width, 1920/img.height);
+    const drawW   = img.width  * scale;
+    const drawH   = img.height * scale;
+    const offX    = (1080 - drawW) / 2;
+    const offY    = (1920 - drawH) / 2;
+
+    ctx.filter = 'brightness(0.52) saturate(0.65)';
+    ctx.drawImage(img, offX, offY, drawW, drawH);
+    ctx.filter = 'none';
+
+    // ── Gradient overlay ──
+    const grad = ctx.createLinearGradient(0,0,0,1920);
+    grad.addColorStop(0,    'rgba(0,0,0,0.75)');
+    grad.addColorStop(0.38, 'rgba(0,0,0,0.28)');
+    grad.addColorStop(0.55, 'rgba(0,0,0,0.18)');
+    grad.addColorStop(0.78, 'rgba(0,0,0,0.68)');
+    grad.addColorStop(1,    'rgba(0,0,0,0.97)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1080, 1920);
+
+    // ── Brand top ──
+    ctx.font = '400 22px Inter,sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.28)';
+    ctx.textAlign = 'center';
+    ctx.letterSpacing = '4px';
+    ctx.fillText('DANIEL WISDOM HUB', 540, 70);
+    ctx.letterSpacing = '0px';
+
+    // ── Thin line ──
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();ctx.moveTo(516,130);ctx.lineTo(564,130);ctx.stroke();
+
+    // ── Quote text ──
+    ctx.font = 'italic 300 68px "Cormorant Garamond",Georgia,serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+
+    const lines = quoteText.split('\n').flatMap(l => wrapCanvas(ctx, l.trim(), 860));
+    const lineH = 92;
+    const totalH = lines.length * lineH;
+    let y = Math.max(380, (1920 - totalH) / 2 - 60);
+    lines.forEach(l => { ctx.fillText(l, 540, y); y += lineH; });
+
+    // ── Author ──
+    ctx.font = '400 28px Inter,sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.42)';
+    ctx.letterSpacing = '3px';
+    ctx.fillText(authorText.toUpperCase(), 540, y + 48);
+    ctx.letterSpacing = '0px';
+
+    // ── Tag ──
+    ctx.font = '500 22px Inter,sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.letterSpacing = '2px';
+    ctx.fillText(tagText, 540, 1860);
+    ctx.letterSpacing = '0px';
+
+    // ── Download ──
+    const link = document.createElement('a');
+    link.href     = canvas.toDataURL('image/jpeg', 0.95);
+    link.download = 'daniel-wisdom-wallpaper.jpg';
+    link.click();
+
+    btn.textContent = '⬇️';
+    btn.style.pointerEvents = '';
+    showToast('⬇️ Wallpaper saved to downloads');
+  };
+
+  img.onload  = draw;
+  img.onerror = () => {
+    // Fallback: pure black canvas
+    ctx.fillStyle = '#080808';
+    ctx.fillRect(0,0,1080,1920);
+    // re-run draw without the image
+    const g2 = ctx.createLinearGradient(0,0,0,1920);
+    g2.addColorStop(0,'rgba(0,0,0,.8)');g2.addColorStop(1,'rgba(0,0,0,.98)');
+    ctx.fillStyle=g2;ctx.fillRect(0,0,1080,1920);
+
+    ctx.font='400 22px sans-serif';ctx.fillStyle='rgba(255,255,255,.28)';
+    ctx.textAlign='center';ctx.fillText('DANIEL WISDOM HUB',540,70);
+
+    ctx.font='italic 300 68px Georgia,serif';ctx.fillStyle='#fff';
+    const lines=quoteText.split('\n').flatMap(l=>wrapCanvas(ctx,l.trim(),860));
+    let y=700;lines.forEach(l=>{ctx.fillText(l,540,y);y+=92;});
+
+    ctx.font='400 28px sans-serif';ctx.fillStyle='rgba(255,255,255,.4)';
+    ctx.fillText(authorText.toUpperCase(),540,y+48);
+
+    ctx.font='500 22px sans-serif';ctx.fillStyle='rgba(255,255,255,.2)';
+    ctx.fillText(tagText,540,1860);
+
+    const link=document.createElement('a');
+    link.href=canvas.toDataURL('image/jpeg',0.95);
+    link.download='daniel-wisdom-wallpaper.jpg';
+    link.click();
+    btn.textContent='⬇️';btn.style.pointerEvents='';
+    showToast('⬇️ Downloaded');
+  };
+
+  img.src = imgUrl + (imgUrl.includes('?')?'&':'?') + 'dl=' + Date.now();
+}
+
+/* ── Text wrap helper ── */
+function wrapCanvas(ctx, text, maxW) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    const t = line ? line + ' ' + w : w;
+    if (ctx.measureText(t).width > maxW && line) {
+      lines.push(line); line = w;
+    } else line = t;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+/* ══════════════════════════════════
+   TOAST
+══════════════════════════════════ */
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2600);
+}
+</script>
+</body>
+</html>

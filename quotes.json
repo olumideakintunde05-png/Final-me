@@ -1,0 +1,57 @@
+{
+  "quotes": [
+    {"id":1,"quote":"The secret of getting ahead is getting started.","author":"Mark Twain","category":"Success","image":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80","date":"2026-01-01","likes":0},
+    {"id":2,"quote":"It does not matter how slowly you go as long as you do not stop.","author":"Confucius","category":"Discipline","image":"https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=800&q=80","date":"2026-01-02","likes":0},
+    {"id":3,"quote":"Success is not final, failure is not fatal: it is the courage to continue that counts.","author":"Winston Churchill","category":"Motivation","image":"https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=800&q=80","date":"2026-01-03","likes":0},
+    {"id":4,"quote":"The only way to do great work is to love what you do.","author":"Steve Jobs","category":"Hustle","image":"https://images.unsplash.com/photo-1499092346589-b9b6be3e94b2?w=800&q=80","date":"2026-01-04","likes":0},
+    {"id":5,"quote":"In the middle of every difficulty lies opportunity.","author":"Albert Einstein","category":"Wisdom","image":"https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80","date":"2026-01-05","likes":0},
+    {"id":6,"quote":"Believe you can and you're halfway there.","author":"Theodore Roosevelt","category":"Mindset","image":"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80","date":"2026-01-06","likes":0},
+    {"id":7,"quote":"Life is what happens to you while you're busy making other plans.","author":"John Lennon","category":"Life","image":"https://images.unsplash.com/photo-1477346611705-65d1883cee1e?w=800&q=80","date":"2026-01-07","likes":0},
+    {"id":8,"quote":"The greatest glory in living lies not in never falling, but in rising every time we fall.","author":"Nelson Mandela","category":"Motivation","image":"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80","date":"2026-01-08","likes":0},
+    {"id":9,"quote":"You only live once, but if you do it right, once is enough.","author":"Mae West","category":"Life","image":"https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&q=80","date":"2026-01-09","likes":0},
+    {"id":10,"quote":"Spread love everywhere you go. Let no one ever come to you without leaving happier.","author":"Mother Teresa","category":"Love","image":"https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=80","date":"2026-01-10","likes":0},
+    {"id":11,"quote":"When you reach the end of your rope, tie a knot in it and hang on.","author":"Franklin D. Roosevelt","category":"Discipline","image":"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80","date":"2026-01-11","likes":0},
+    {"id":12,"quote":"Always remember that you are absolutely unique. Just like everyone else.","author":"Margaret Mead","category":"Wisdom","image":"https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?w=800&q=80","date":"2026-01-12","likes":0},
+    {"id":13,"quote":"Do not go where the path may lead, go instead where there is no path and leave a trail.","author":"Ralph Waldo Emerson","category":"Hustle","image":"https://images.unsplash.com/photo-1478827217976-7214a0556393?w=800&q=80","date":"2026-01-13","likes":0},
+    {"id":14,"quote":"You will face many defeats in life, but never let yourself be defeated.","author":"Maya Angelou","category":"Mindset","image":"https://images.unsplash.com/photo-1445112098124-3e76dd67983c?w=800&q=80","date":"2026-01-14","likes":0},
+    {"id":15,"quote":"The future belongs to those who believe in the beauty of their dreams.","author":"Eleanor Roosevelt","category":"Success","image":"https://images.unsplash.com/photo-1414609245224-aea7dde51f0b?w=800&q=80","date":"2026-01-15","likes":0},
+    {"id":16,"quote":"It is during our darkest moments that we must focus to see the light.","author":"Aristotle","category":"Wisdom","image":"https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=800&q=80","date":"2026-01-16","likes":0},
+    {"id":17,"quote":"Whoever is happy will make others happy too.","author":"Anne Frank","category":"Love","image":"https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=800&q=80","date":"2026-01-17","likes":0},
+    {"id":18,"quote":"Do not let the fear of striking out hold you back.","author":"Babe Ruth","category":"Motivation","image":"https://images.unsplash.com/photo-1484910292437-025e5d13ce87?w=800&q=80","date":"2026-01-18","likes":0},
+    {"id":19,"quote":"You have brains in your head. You have feet in your shoes. You can steer yourself any direction you choose.","author":"Dr. Seuss","category":"Life","image":"https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&q=80","date":"2026-01-19","likes":0},
+    {"id":20,"quote":"If life were predictable it would cease to be life and be without flavor.","author":"Eleanor Roosevelt","category":"Wisdom","image":"https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800&q=80","date":"2026-01-20","likes":0},
+    {"id":21,"quote":"If you look at what you have in life, you'll always have more.","author":"Oprah Winfrey","category":"Mindset","image":"https://images.unsplash.com/photo-1511300636408-a63a89df3482?w=800&q=80","date":"2026-01-21","likes":0},
+    
+    
+    
+    
+    
+    {"id":23,"quote":"Never let the fear of striking out keep you from playing the game.","author":"Babe Ruth","category":"Hustle","image":"https://images.unsplash.com/photo-1536431311719-398b6704d4cc?w=800&q=80","date":"2026-01-23","likes":0},
+    {"id":24,"quote":"Money and success don't change people; they merely amplify what is already there.","author":"Will Smith","category":"Wisdom","image":"https://images.unsplash.com/photo-1467620785935-e3f4a7190408?w=800&q=80","date":"2026-01-24","likes":0},
+    {"id":25,"quote":"Your time is limited, so don't waste it living someone else's life.","author":"Steve Jobs","category":"Life","image":"https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&q=80","date":"2026-01-25","likes":0},
+    {"id":26,"quote":"Not how long, but how well you have lived is the main thing.","author":"Seneca","category":"Wisdom","image":"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80","date":"2026-01-26","likes":0},
+    {"id":27,"quote":"If you're not stubborn, you'll give up on experiments too soon.","author":"Jeff Bezos","category":"Discipline","image":"https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?w=800&q=80","date":"2026-01-27","likes":0},
+    {"id":28,"quote":"We must be willing to let go of the life we planned so as to have the life that is waiting for us.","author":"Joseph Campbell","category":"Mindset","image":"https://images.unsplash.com/photo-1458668383970-8ddd3927deed?w=800&q=80","date":"2026-01-28","likes":0},
+    {"id":29,"quote":"You miss 100% of the shots you don't take.","author":"Wayne Gretzky","category":"Hustle","image":"https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=800&q=80","date":"2026-01-29","likes":0},
+
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  ],
+  "authors": [
+    {"name":"Marcus Aurelius","bio":"Roman Emperor & Stoic Philosopher","avatar":"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80","count":8},
+    {"name":"Maya Angelou","bio":"American Poet & Civil Rights Activist","avatar":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80","count":12},
+    {"name":"Albert Einstein","bio":"Theoretical Physicist","avatar":"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80","count":7},
+    {"name":"Steve Jobs","bio":"Co-founder of Apple Inc.","avatar":"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80","count":9},
+    {"name":"Oprah Winfrey","bio":"Media Executive & Philanthropist","avatar":"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80","count":11},
+    {"name":"Nelson Mandela","bio":"Anti-apartheid Leader & Statesman","avatar":"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80","count":6}
+  ]
+}
